@@ -25,3 +25,17 @@ def init_db():
         ''')
         conn.commit()
 
+def ensure_admin():
+    with get_connection() as conn:
+        c = conn.cursor()
+        c.execute("SELECT * FROM users WHERE username='admin'")
+        if not c.fetchone():
+            c.execute(
+                "INSERT INTO users (username, password, role, name, email) VALUES (?, ?, ?, ?, ?)",
+                ("admin", hash_password("admin123"), "admin", "Administrator", "admin@admin.com")
+            )
+            conn.commit()
+
+if not os.path.exists(DB_FILE):
+    init_db()
+ensure_admin()
