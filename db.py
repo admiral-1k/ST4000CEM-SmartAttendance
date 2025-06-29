@@ -23,6 +23,18 @@ def init_db():
             email TEXT
         )
         ''')
+        c.execute('''
+        CREATE TABLE IF NOT EXISTS students (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT,
+            student_id TEXT UNIQUE,
+            teacher_id INTEGER,
+            photo_path TEXT,
+            info TEXT,
+            FOREIGN KEY(teacher_id) REFERENCES users(id)
+        )
+        ''')
+
         conn.commit()
 
 def ensure_admin():
