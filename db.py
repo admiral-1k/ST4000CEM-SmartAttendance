@@ -34,7 +34,16 @@ def init_db():
             FOREIGN KEY(teacher_id) REFERENCES users(id)
         )
         ''')
-
+        c.execute('''
+        CREATE TABLE IF NOT EXISTS attendance (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            student_id INTEGER,
+            date TEXT,
+            status TEXT,
+            mode TEXT,
+            FOREIGN KEY(student_id) REFERENCES students(id)
+        )
+        ''')
         conn.commit()
 
 def ensure_admin():
