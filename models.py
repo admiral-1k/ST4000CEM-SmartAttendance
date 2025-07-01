@@ -6,6 +6,7 @@ def get_user(username):
         c = conn.cursor()
         c.execute("SELECT * FROM users WHERE username=?", (username,))
         return c.fetchone()
+
 def get_user_by_id(user_id):
     with get_connection() as conn:
         c = conn.cursor()
@@ -24,6 +25,7 @@ def update_password(username, new_password):
         c = conn.cursor()
         c.execute("UPDATE users SET password=? WHERE username=?", (new_password, username))
         conn.commit()
+
 def update_profile(username, name, email):
     with get_connection() as conn:
         c = conn.cursor()
@@ -49,3 +51,27 @@ def record_attendance(student_id, date, status, mode):
         c.execute("INSERT INTO attendance (student_id, date, status, mode) VALUES (?, ?, ?, ?)",
                   (student_id, date, status, mode))
         conn.commit()
+
+def get_attendance(student_id):
+    with get_connection() as conn:
+        c = conn.cursor()
+        c.execute("SELECT date, status, mode FROM attendance WHERE student_id=?", (student_id,))
+        return c.fetchall()
+
+def get_students_by_teacher(teacher_id):
+    with get_connection() as conn:
+        c = conn.cursor()
+        c.execute("SELECT * FROM students WHERE teacher_id=?", (teacher_id,))
+        return c.fetchall()
+
+def get_all_teachers():
+    with get_connection() as conn:
+        c = conn.cursor()
+        c.execute("SELECT * FROM users WHERE role='teacher'")
+        return c.fetchall()
+
+def get_all_students():
+    with get_connection() as conn:
+        c = conn.cursor()
+        c.execute("SELECT * FROM students")
+        return c.fetchall()
