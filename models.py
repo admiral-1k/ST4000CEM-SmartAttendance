@@ -75,3 +75,20 @@ def get_all_students():
         c = conn.cursor()
         c.execute("SELECT * FROM students")
         return c.fetchall()
+
+def get_attendance_by_teacher(teacher_id):
+    with get_connection() as conn:
+        c = conn.cursor()
+        c.execute("""
+        SELECT students.name, attendance.date, attendance.status
+        FROM attendance
+        JOIN students ON attendance.student_id = students.id
+        WHERE students.teacher_id=?
+        """, (teacher_id,))
+        return c.fetchall()
+
+def get_teacher_by_id(teacher_id):
+    with get_connection() as conn:
+        c = conn.cursor()
+        c.execute("SELECT * FROM users WHERE id=? AND role='teacher'", (teacher_id,))
+        return c.fetchone()
